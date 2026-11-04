@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Componente reutilizable icon. Sus props conectan contenido y acciones
+ * con el componente que lo usa; para seguir el dato, buscar sus importaciones y los
+ * callbacks recibidos en lugar de suponer que guarda directamente en una base.
+ */
+
 import { Image } from 'expo-image';
 
 const paths = {

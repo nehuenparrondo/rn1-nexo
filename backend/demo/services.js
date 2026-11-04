@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Implementación en memoria del contrato de usuarios, sesiones y códigos
+ * para la demo. No ejecuta SQL ni conserva cuentas después de reiniciar; permite probar
+ * pantallas sin confundirlo con el backend normal.
+ */
+
 import bcrypt from 'bcrypt';
 import { randomBytes, randomInt } from 'node:crypto';
 

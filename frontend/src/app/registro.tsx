@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Pantalla/entrada de Expo Router. Alta: valida el borrador, solicita
+ * crear la cuenta y abre el paso de verificación. Las operaciones persistentes se delegan
+ * a servicios y no se ejecutan como SQL desde el teléfono.
+ */
+
 import { useState } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';

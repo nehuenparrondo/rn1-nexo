@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Arranque de demostración: inyecta cuentas/sesiones temporales, conserva
+ * el envío real a Mailtrap Sandbox y rechaza producción. Reiniciar este proceso borra sus
+ * cuentas, aunque el frontend sea el mismo.
+ */
+
 import { createApp } from '../app.js';
 import * as correo from '../modules/correo.js';
 import { createDemoServices } from './services.js';

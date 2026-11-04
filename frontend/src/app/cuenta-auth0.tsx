@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Pantalla/entrada de Expo Router. Perfil social externo: muestra la
+ * identidad de Auth0, separada de la sesión SQL propia. Las operaciones persistentes se
+ * delegan a servicios y no se ejecutan como SQL desde el teléfono.
+ */
+
 import { Action, Avatar, Card, Copy, Feedback, Screen } from '@/components/ui';
 import { useTask } from '@/hooks/use-task';
 import { useSocial } from '@/providers/social-provider';

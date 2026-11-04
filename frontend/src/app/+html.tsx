@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Pantalla/entrada de Expo Router. Documento HTML de la exportación web;
+ * no es una pantalla del teléfono. Las operaciones persistentes se delegan a servicios y
+ * no se ejecutan como SQL desde el teléfono.
+ */
+
 import { ScrollViewStyleReset } from 'expo-router/html';
 import type { PropsWithChildren } from 'react';
 import { palettes } from '@/theme';

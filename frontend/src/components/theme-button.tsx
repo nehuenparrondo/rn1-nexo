@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Parte del sistema visual: comparte colores, tamaños o preferencia de
+ * tema según su implementación. La preferencia de apariencia es independiente de la
+ * autenticación y de los datos de las tareas.
+ */
+
 import { Platform, Pressable } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/providers/theme-provider';

@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Pantalla/entrada de Expo Router. Verificación: envía el código y
+ * controla la espera del reenvío con el vencimiento del servidor. Las operaciones
+ * persistentes se delegan a servicios y no se ejecutan como SQL desde el teléfono.
+ */
+
 import { useEffect, useState } from 'react';
 import { Action, Card, Copy, Feedback, Field, Screen } from '@/components/ui';
 import { useTask } from '@/hooks/use-task';

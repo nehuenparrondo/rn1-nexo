@@ -1,10 +1,21 @@
+/**
+ * Guía de lectura. Cliente HTTP móvil/web de RN1. En nativo usa Bearer leído del almacén
+ * seguro; en web deja que el navegador envíe cookies. Traduce errores y controla tiempos
+ * de espera para las pantallas.
+ */
+
 import Constants from 'expo-constants';
 import { Platform } from 'react-native';
 import type { AdminUser, User } from '@/types/user';
 import { clearSession, readSession, saveSession } from './session-storage';
 
+/**
+ * Selecciona la dirección según plataforma y configuración pública. En un teléfono
+ * localhost es el propio teléfono; por eso una API en la PC necesita su IP de red. Nunca
+ * poner claves en EXPO_PUBLIC_.
+ */
 function apiUrl() {
-  // A phone needs the PC's LAN address; the browser can keep localhost for cookies.
+  // El teléfono necesita la IP de red de la PC; en web se puede usar localhost con cookies.
   const nativeUrl =
     Platform.OS !== 'web'
       ? process.env.EXPO_PUBLIC_NATIVE_API_URL?.trim()
@@ -33,6 +44,11 @@ export type AuthenticatedResponse = {
   sessionToken?: string;
 };
 const expiredListeners = new Set<() => void>();
+/**
+ * Registra una función que reaccionará ante una respuesta 401 de una operación
+ * autenticada. Devuelve una función para desuscribirse al desmontar y evitar avisos
+ * duplicados.
+ */
 export function onSessionExpired(listener: () => void) {
   expiredListeners.add(listener);
   return () => {
@@ -41,6 +57,12 @@ export function onSessionExpired(listener: () => void) {
 }
 export const clearLocalSession = clearSession;
 
+/**
+ * Construye la petición con cookie en web o Bearer en nativo y limita la espera a 15
+ * segundos. Una respuesta 401 autenticada limpia el token y avisa a los proveedores; los
+ * errores de red o de respuesta se convierten en ApiError. expectedStatus exige una
+ * confirmación concreta en cambios de contraseña.
+ */
 async function request<T>(
   path: string,
   options: RequestInit = {},
@@ -107,6 +129,11 @@ async function request<T>(
     clearTimeout(timeout);
   }
 }
+/**
+ * Ejecuta login/registro sin exigir una sesión previa. En nativo valida y guarda el token
+ * de sesión recibido; en web la cookie llega por el navegador sin copiar el token a
+ * JavaScript.
+ */
 async function authenticate(path: string, body: unknown) {
   const response = await request<AuthenticatedResponse>(
     path,
@@ -135,20 +162,36 @@ export const register = (username: string, email: string, password: string) =>
     email: email.trim().toLowerCase(),
     password,
   });
+/**
+ * Consulta la sesión vigente al iniciar o refrescar la aplicación. Recupera el perfil
+ * desde el servidor en vez de confiar en un usuario guardado en localStorage.
+ */
 export const getCurrentUser = () => request<User>('/sesion');
 export async function logout() {
   await request<void>('/logout', { method: 'POST' });
   await clearSession();
 }
+/**
+ * Envía al servidor el código escrito por la persona. La validación definitiva y la
+ * actualización del email se realizan en el backend.
+ */
 export const verifyEmailCode = (code: string) =>
   request<User>('/verificacion-email/confirmar', {
     method: 'POST',
     body: JSON.stringify({ codigo: code }),
   });
+/**
+ * Solicita al servidor otro envío de verificación. La pantalla no puede generar un código
+ * válido cambiando su contador.
+ */
 export const resendEmailCode = () =>
   request<{ expiresAt: string }>('/verificacion-email/enviar', {
     method: 'POST',
   });
+/**
+ * Envía el email para solicitar un enlace de recuperación. La respuesta genérica evita
+ * confirmar públicamente si esa cuenta existe.
+ */
 export const requestPasswordRecovery = (email: string) =>
   request<{ message: string }>(
     '/recuperacion-password',
@@ -158,6 +201,10 @@ export const requestPasswordRecovery = (email: string) =>
     },
     false,
   );
+/**
+ * Envía el token de recuperación y la contraseña elegida. Un token vencido o usado debe
+ * rechazarse aunque el formulario siga abierto.
+ */
 export const resetPassword = (token: string, password: string) =>
   request<void>(
     '/restablecer-password',
@@ -170,11 +217,19 @@ export const updateUsername = (username: string) =>
     method: 'PUT',
     body: JSON.stringify({ username: username.trim() }),
   });
+/**
+ * Envía la foto seleccionada al endpoint de la cuenta autenticada. Elegir una imagen local
+ * no significa que ya se haya guardado en el servidor.
+ */
 export const updateProfilePicture = (profilePicture: string | null) =>
   request<User>('/cuenta/foto', {
     method: 'PUT',
     body: JSON.stringify({ profilePicture }),
   });
+/**
+ * Solicita el cambio usando contraseña actual y nueva. Es distinto de recuperar por
+ * enlace: aquí ya se dispone de una sesión y se exige la clave vigente.
+ */
 export const changePassword = (currentPassword: string, password: string) =>
   request<void>(
     '/cuenta/password',
@@ -182,6 +237,10 @@ export const changePassword = (currentPassword: string, password: string) =>
     true,
     204,
   );
+/**
+ * Solicita la baja de la cuenta de la sesión actual. El servidor obtiene su identidad
+ * desde la sesión, no desde un ID que el formulario pueda alterar.
+ */
 export const deleteOwnAccount = () =>
   request<void>('/cuenta', { method: 'DELETE' });
 export const getAdminUsers = (query = '') =>

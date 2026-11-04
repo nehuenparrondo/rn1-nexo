@@ -4,6 +4,11 @@ import {
   esClienteNativo,
 } from './modules/sessionTransport.js';
 
+/**
+ * Recibe servicios de usuarios, sesiones y correo y construye la misma API para ejecución
+ * normal, pruebas o demo. Inyectar servicios en memoria no convierte esos datos temporales
+ * en persistencia MySQL.
+ */
 export function createApp(services) {
   const {
     obtenerPersonasParaAdmin,
@@ -71,6 +76,11 @@ export function createApp(services) {
   app.use(express.json({ limit: '3mb' }));
   app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 
+  /**
+   * Construye un middleware que exige textos no vacíos antes de entrar en el manejador.
+   * Devuelve 400 para entradas inválidas; next permite continuar a la siguiente
+   * comprobación.
+   */
   function validarCampos(...campos) {
     return (req, res, next) => {
       const faltantes = campos.filter(
@@ -89,6 +99,11 @@ export function createApp(services) {
   }
 
   // También se valida en el servidor: no puede evitarse modificando el formulario.
+  /**
+   * Aplica la política de contraseña en el servidor. La validación visual mejora la
+   * experiencia, pero no reemplaza esta comprobación para solicitudes hechas fuera del
+   * formulario.
+   */
   function validarPasswordSegura(req, res, next) {
     const password = req.body?.password;
     // bcrypt solo compara los primeros 72 bytes; evita cambios que ignoren el sufijo.
@@ -116,6 +131,10 @@ export function createApp(services) {
     next();
   }
 
+  /**
+   * Valida y normaliza el nombre de usuario antes de consultar SQL. Este campo es un
+   * identificador de acceso, no el nombre de una persona del ejercicio de saludo.
+   */
   function validarUsername(req, res, next) {
     const username =
       typeof req.body?.username === 'string' ? req.body.username.trim() : '';
@@ -129,6 +148,10 @@ export function createApp(services) {
     next();
   }
 
+  /**
+   * Comprueba el formato y normaliza el email recibido. Esto no demuestra propiedad del
+   * buzón: esa parte corresponde al código de verificación.
+   */
   function validarEmail(req, res, next) {
     const email =
       typeof req.body?.email === 'string'
@@ -148,17 +171,29 @@ export function createApp(services) {
     next();
   }
 
+  /**
+   * Construye la respuesta de perfil sin contraseña ni hash. El navegador recibe solo los
+   * datos necesarios para mostrar la cuenta y su rol.
+   */
   function usuarioPublico(usuario) {
     // El id es un dato interno: únicamente se incluye en las respuestas del panel admin.
     const { id, password, password_hash, is_admin, ...datos } = usuario;
     return { ...datos, role: is_admin ? 'admin' : 'user' };
   }
 
+  /**
+   * Añade el ID interno a los campos públicos para permitir las operaciones del panel. No
+   * convierte por sí mismo al solicitante en administrador.
+   */
   function usuarioAdmin(usuario) {
     return { id: usuario.id, ...usuarioPublico(usuario) };
   }
 
   // Resuelve la cookie en cada ruta protegida y deja el usuario disponible en req.usuario.
+  /**
+   * Resuelve la credencial de sesión y carga el usuario en req.usuario. Si no hay sesión
+   * válida responde 401 y no deja llegar al código que modifica datos.
+   */
   async function requerirSesion(req, res, next) {
     const token = obtenerTokenSesion(req);
     const usuario = await obtenerUsuarioPorSesion(token);
@@ -169,6 +204,10 @@ export function createApp(services) {
     next();
   }
 
+  /**
+   * Bloquea con 403 las operaciones que exigen email confirmado. Una sesión abierta no
+   * implica que el correo ya esté verificado.
+   */
   function requerirEmailVerificado(req, res, next) {
     if (!req.usuario.email_verified_at) {
       return res
@@ -178,6 +217,10 @@ export function createApp(services) {
     next();
   }
 
+  /**
+   * Exige el rol administrativo además de la sesión. Ocultar el botón del panel en el
+   * frontend no sustituye este permiso del backend.
+   */
   function requerirAdmin(req, res, next) {
     if (!req.usuario.is_admin) {
       return res
@@ -207,6 +250,10 @@ export function createApp(services) {
     next();
   }
 
+  /**
+   * Coordina generación del código y envío del correo; devuelve el vencimiento que debe
+   * mostrar el contador de la pantalla.
+   */
   async function enviarNuevoCodigo(usuario) {
     const { codigo, expiresAt } = await crearCodigoVerificacion(usuario.id);
     await enviarCodigoVerificacion({

@@ -1,3 +1,10 @@
+/**
+ * Guía de lectura. Pantalla/entrada de Expo Router. Perfil: separa borradores de
+ * nombre/foto de los datos confirmados y controla cambio de contraseña y baja. Las
+ * operaciones persistentes se delegan a servicios y no se ejecutan como SQL desde el
+ * teléfono.
+ */
+
 import { useState } from 'react';
 import { View } from 'react-native';
 import { router } from 'expo-router';

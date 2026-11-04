@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Persistencia nativa del token mediante SecureStore. No almacena la
+ * contraseña del usuario; el servidor debe seguir validando la sesión en cada solicitud
+ * protegida.
+ */
+
 import * as SecureStore from 'expo-secure-store';
 
 const KEY = 'rn1.session';

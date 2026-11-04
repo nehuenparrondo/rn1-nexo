@@ -1,3 +1,8 @@
+/**
+ * Guía de lectura. Adaptador entre el SDK de Auth0 y el contexto social. Mantiene las
+ * operaciones de la identidad externa separadas de la API de usuarios de RN1.
+ */
+
 import { type PropsWithChildren } from 'react';
 import { Platform } from 'react-native';
 import {
@@ -23,6 +28,10 @@ function Bridge({ children }: PropsWithChildren) {
       );
     }
   }
+  /**
+   * Solicita el cierre remoto antes de limpiar el estado local. La pantalla no debe indicar
+   * cierre confirmado si la API falló.
+   */
   async function signOut() {
     if (Platform.OS === 'web')
       await clearSession({ returnToUrl: window.location.origin });

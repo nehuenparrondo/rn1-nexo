@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Selecciona si el acceso social está disponible en este entorno. La
+ * sesión externa es independiente de la cuenta SQL tradicional; no asumir que abrir Auth0
+ * crea automáticamente un usuario local.
+ */
+
 import {
   lazy,
   Suspense,

@@ -1,3 +1,8 @@
+/**
+ * Guía de lectura. Comparte paleta y preferencia visual. Persistir el tema no persiste una
+ * sesión de usuario: son datos con fines y protecciones diferentes.
+ */
+
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
   createContext,

@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Estado de sesión local compartido entre pantallas. Conserva perfil
+ * público, carga y errores; restaura la sesión consultando la API y reacciona cuando la
+ * app vuelve al primer plano.
+ */
+
 import {
   createContext,
   use,
@@ -87,16 +93,28 @@ export function SessionProvider({ children }: PropsWithChildren) {
     });
     return () => subscription.remove();
   }, [user, refresh]);
+  /**
+   * Borra el transporte local de la sesión y el perfil visible, con un aviso opcional. Esto
+   * por sí solo no equivale a revocar la sesión persistida del servidor.
+   */
   async function forget(message = '') {
     await api.clearLocalSession();
     setUser(null);
     setExpiresAt(null);
     setNotice(message);
   }
+  /**
+   * Solicita el cierre remoto antes de limpiar el estado local. La pantalla no debe indicar
+   * cierre confirmado si la API falló.
+   */
   async function signOut() {
     await api.logout();
     await forget('Sesión cerrada.');
   }
+  /**
+   * Instala en el contexto el perfil público y el vencimiento recibidos tras login/registro.
+   * No es una escritura SQL: la cuenta ya fue procesada por el backend.
+   */
   function accept(response: api.AuthenticatedResponse) {
     setUser(response.usuario);
     setExpiresAt(response.verificationExpiresAt);
@@ -128,6 +146,10 @@ export function SessionProvider({ children }: PropsWithChildren) {
     </SessionContext>
   );
 }
+/**
+ * Entrega el estado y operaciones del proveedor de sesión a una pantalla. Si falta el
+ * proveedor, informa el error en vez de fabricar un usuario sin autenticación.
+ */
 export function useSession() {
   const session = use(SessionContext);
   if (!session) throw new Error('SessionProvider is missing');

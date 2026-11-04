@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Raíz de Expo Router y proveedores de tema, sesión local y sesión
+ * social. Espera la restauración y define qué pantallas se pueden mostrar según
+ * verificación/rol; la API vuelve a comprobar permisos.
+ */
+
 import { Stack } from 'expo-router/stack';
 import Head from 'expo-router/head';
 import {

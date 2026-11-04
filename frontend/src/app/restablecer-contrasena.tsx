@@ -1,3 +1,10 @@
+/**
+ * Guía de lectura. Pantalla/entrada de Expo Router. Contraseña nueva: recibe el token de
+ * un enlace profundo o URL y solo informa éxito cuando la API confirma el cambio. Las
+ * operaciones persistentes se delegan a servicios y no se ejecutan como SQL desde el
+ * teléfono.
+ */
+
 import { useState } from 'react';
 import { router, useLocalSearchParams } from 'expo-router';
 import { Action, Card, Copy, Feedback, Field, Screen } from '@/components/ui';

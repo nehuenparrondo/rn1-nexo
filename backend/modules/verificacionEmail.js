@@ -1,3 +1,8 @@
+/**
+ * Guía de lectura. Confirmación de propiedad del correo mediante un código temporal. Usa
+ * tokens_autenticacion y actualiza email_verified_at; no cambia la contraseña del usuario.
+ */
+
 import crypto from 'node:crypto';
 import connection from './db.js';
 
@@ -12,7 +17,12 @@ function hashearCodigo(codigo) {
   return crypto.createHash('sha256').update(codigo).digest('hex');
 }
 
-/** Crea un código nuevo e invalida los códigos anteriores del mismo usuario. */
+/** Crea un código nuevo e invalida los códigos anteriores del mismo usuario.
+ *
+ * Para seguir el recorrido: Genera el código de confirmación de email y registra su hash y
+ * vencimiento. El código legible se entrega al módulo de correo, no se guarda como
+ * contraseña de la cuenta.
+ */
 export async function crearCodigoVerificacion(usuarioId) {
   const codigo = crearCodigo();
 
@@ -36,7 +46,11 @@ export async function crearCodigoVerificacion(usuarioId) {
   };
 }
 
-/** Verifica un código activo y marca el correo como confirmado si es correcto. */
+/** Verifica un código activo y marca el correo como confirmado si es correcto.
+ *
+ * Para seguir el recorrido: Compara el código ingresado con el registro vigente. Si
+ * coincide, lo marca como usado y registra la fecha de verificación del email.
+ */
 export async function verificarCodigoVerificacion(usuarioId, codigo) {
   const [filas] = await connection.query(
     `SELECT id, token_hash

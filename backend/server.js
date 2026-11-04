@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Arranque normal de RN1: reúne los servicios SQL y de correo, construye
+ * createApp y abre el puerto configurado. A diferencia de demo/server.js, este modo
+ * requiere MySQL.
+ */
+
 import { createApp } from './app.js';
 import * as consultas from './modules/consultas.js';
 import * as sesiones from './modules/sesiones.js';

@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Contrato compartido del acceso social: usuario externo, disponibilidad
+ * y operaciones. No contiene por sí solo la implementación del proveedor ni credenciales
+ * privadas.
+ */
+
 import { createContext } from 'react';
 export type SocialUser = {
   name?: string;

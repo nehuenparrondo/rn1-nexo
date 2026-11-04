@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Pantalla/entrada de Expo Router. Normaliza el enlace que abre la
+ * aplicación nativa para enviarlo a la ruta correcta. Las operaciones persistentes se
+ * delegan a servicios y no se ejecutan como SQL desde el teléfono.
+ */
+
 // Auth0 owns its callback URL; Expo Router should return to the session-aware home screen.
 // Keep password-reset links reachable on both cold starts and an already-open app.
 export function redirectSystemPath({

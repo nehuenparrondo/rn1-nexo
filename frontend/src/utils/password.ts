@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Ayudas compartidas para transformar o validar datos. Usarlas desde
+ * varios puntos mantiene las mismas reglas; comprobar sus retornos antes de informar éxito
+ * en la interfaz.
+ */
+
 /** La contraseña requiere ocho caracteres como mínimo, una letra y un número. */
 export function getPasswordError(password: string) {
   if (password.length < 8)

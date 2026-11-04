@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Pantalla/entrada de Expo Router. Recuperación: solicita un enlace por
+ * email sin exigir una sesión previa. Las operaciones persistentes se delegan a servicios
+ * y no se ejecutan como SQL desde el teléfono.
+ */
+
 import { useState } from 'react';
 import { router } from 'expo-router';
 import { Action, Card, Copy, Feedback, Field, Screen } from '@/components/ui';

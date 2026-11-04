@@ -1,5 +1,9 @@
 export const NOMBRE_COOKIE_SESION = 'sesion_id';
 
+/**
+ * Interpreta la cabecera Cookie para encontrar un nombre concreto. Leer el texto no
+ * demuestra que la sesión sea válida: esa comprobación requiere consultar la sesión.
+ */
 export function leerCookie(cabeceraCookie, nombre) {
   const cookie = cabeceraCookie
     ?.split(';')

@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Pantalla/entrada de Expo Router. Acceso: toma credenciales, llama a la
+ * API y entrega la respuesta al contexto de sesión. Las operaciones persistentes se
+ * delegan a servicios y no se ejecutan como SQL desde el teléfono.
+ */
+
 import { useState } from 'react';
 import { View } from 'react-native';
 import { router, Redirect } from 'expo-router';

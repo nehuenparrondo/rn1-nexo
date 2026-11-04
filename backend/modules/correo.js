@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Transporte de Mailtrap del backend de RN1. Lee configuración privada y
+ * distingue el buzón Sandbox mediante sus opciones; crear el mensaje no cambia la cuenta
+ * ni valida el código.
+ */
+
 import { MailtrapClient } from 'mailtrap';
 
 /** Lee la configuración al enviar, sin fijar un buzón de otra cuenta en el código. */
@@ -32,7 +38,12 @@ function transporteCorreo() {
   };
 }
 
-/** Envía el código; en Sandbox se recibe en Mailtrap, no en el email real. */
+/** Envía el código; en Sandbox se recibe en Mailtrap, no en el email real.
+ *
+ * Para seguir el recorrido: Recibe email, usuario y código ya generados y compone el
+ * mensaje. En Sandbox el destinatario aparece en el mensaje, pero la entrega se captura en
+ * Mailtrap, no en su Gmail.
+ */
 export async function enviarCodigoVerificacion(datos) {
   const { sender, client } = transporteCorreo();
   await client.send({
@@ -44,7 +55,12 @@ export async function enviarCodigoVerificacion(datos) {
   });
 }
 
-/** Conserva el enlace generado por el backend, incluidos los enlaces de Expo Go. */
+/** Conserva el enlace generado por el backend, incluidos los enlaces de Expo Go.
+ *
+ * Para seguir el recorrido: Compone el mensaje de recuperación con el enlace temporal.
+ * Enviarlo no cambia la contraseña: el cambio ocurre al validar el token y enviar la nueva
+ * clave.
+ */
 export async function enviarEnlaceRecuperacion(datos) {
   const { sender, client } = transporteCorreo();
   await client.send({

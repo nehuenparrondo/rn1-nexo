@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Parte del sistema visual: comparte colores, tamaños o preferencia de
+ * tema según su implementación. La preferencia de apariencia es independiente de la
+ * autenticación y de los datos de las tareas.
+ */
+
 import { Platform } from 'react-native';
 
 /** Paletas semánticas compartidas por todas las pantallas. */

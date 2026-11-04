@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Sesiones propias del sistema: relaciona un token aleatorio con una
+ * cuenta y un vencimiento. La base conserva el hash del token, mientras el cliente
+ * transporta el valor original.
+ */
+
 import crypto from 'node:crypto';
 import connection from './db.js';
 
@@ -14,7 +20,12 @@ function hashearToken(token) {
   return crypto.createHash('sha256').update(token).digest('hex');
 }
 
-/** Crea una sesión persistente y devuelve el token que se enviará al navegador. */
+/** Crea una sesión persistente y devuelve el token que se enviará al navegador.
+ *
+ * Para seguir el recorrido: Genera un token aleatorio, guarda solo su hash asociado al ID
+ * del usuario y devuelve el token original para el transporte al cliente. Crear sesión no
+ * crea otra cuenta.
+ */
 export async function crearSesion(usuarioId, { userAgent, ipAddress }) {
   const token = crearToken();
   const tokenHash = hashearToken(token);
@@ -34,7 +45,11 @@ export async function crearSesion(usuarioId, { userAgent, ipAddress }) {
   return token;
 }
 
-/** Obtiene el usuario dueño de una sesión activa y actualiza su último uso. */
+/** Obtiene el usuario dueño de una sesión activa y actualiza su último uso.
+ *
+ * Para seguir el recorrido: Valida la forma del token, busca su hash en una sesión vigente
+ * y no revocada, y devuelve el usuario asociado. También actualiza la fecha de último uso.
+ */
 export async function obtenerUsuarioPorSesion(token) {
   if (!/^[a-f0-9]{64}$/.test(token ?? '')) return null;
 
@@ -59,7 +74,11 @@ export async function obtenerUsuarioPorSesion(token) {
   return filas[0];
 }
 
-/** Revoca la sesión actual al cerrar sesión. */
+/** Revoca la sesión actual al cerrar sesión.
+ *
+ * Para seguir el recorrido: Marca la sesión como revocada para que el servidor deje de
+ * aceptarla. Borrar solo el usuario del estado de React no reemplaza esta operación.
+ */
 export async function revocarSesion(token) {
   if (!/^[a-f0-9]{64}$/.test(token ?? '')) return;
 
@@ -69,7 +88,11 @@ export async function revocarSesion(token) {
   );
 }
 
-/** Revoca todas las sesiones después de un restablecimiento de contraseña. */
+/** Revoca todas las sesiones después de un restablecimiento de contraseña.
+ *
+ * Para seguir el recorrido: Invalida todas las sesiones de la cuenta después de una
+ * operación sensible, por ejemplo un restablecimiento de contraseña.
+ */
 export async function revocarSesionesDeUsuario(
   usuarioId,
   executor = connection,
@@ -80,7 +103,11 @@ export async function revocarSesionesDeUsuario(
   );
 }
 
-/** Conserva la sesión con la que se cambió la contraseña y revoca las demás. */
+/** Conserva la sesión con la que se cambió la contraseña y revoca las demás.
+ *
+ * Para seguir el recorrido: Invalida las sesiones de otros dispositivos, conservando la
+ * que está realizando el cambio de contraseña.
+ */
 export async function revocarOtrasSesionesDeUsuario(
   usuarioId,
   tokenActual,
@@ -96,7 +123,12 @@ export async function revocarOtrasSesionesDeUsuario(
   );
 }
 
-/** Lee una cookie concreta sin añadir dependencias externas. */
+/** Lee una cookie concreta sin añadir dependencias externas.
+ *
+ * Para seguir el recorrido: Interpreta la cabecera Cookie para encontrar un nombre
+ * concreto. Leer el texto no demuestra que la sesión sea válida: esa comprobación requiere
+ * consultar la sesión.
+ */
 export function leerCookie(cabeceraCookie, nombre) {
   const cookie = cabeceraCookie
     ?.split(';')
@@ -112,7 +144,12 @@ export function leerCookie(cabeceraCookie, nombre) {
   }
 }
 
-/** Configuración común: JavaScript no puede acceder a la cookie de sesión. */
+/** Configuración común: JavaScript no puede acceder a la cookie de sesión.
+ *
+ * Para seguir el recorrido: Configura la duración y las restricciones de la cookie.
+ * HttpOnly impide leerla desde el JavaScript de la página; Secure se exige cuando el
+ * entorno es producción.
+ */
 export function opcionesCookieSesion() {
   return {
     httpOnly: true,

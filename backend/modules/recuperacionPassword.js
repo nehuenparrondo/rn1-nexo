@@ -1,3 +1,8 @@
+/**
+ * Guía de lectura. Recuperación por enlace de un solo uso. Distingue el token que autoriza
+ * el cambio del hash de la nueva contraseña que finalmente se guarda.
+ */
+
 import crypto from 'node:crypto';
 import connection from './db.js';
 import { actualizarPassword } from './consultas.js';
@@ -17,7 +22,12 @@ function hashearToken(token) {
   return crypto.createHash('sha256').update(token).digest('hex');
 }
 
-/** Crea un enlace nuevo e invalida cualquier enlace de recuperación anterior. */
+/** Crea un enlace nuevo e invalida cualquier enlace de recuperación anterior.
+ *
+ * Para seguir el recorrido: Genera un token nuevo, invalida enlaces anteriores y guarda un
+ * hash con vencimiento de 15 minutos. Devuelve el enlace con el token original; el módulo
+ * de correo se encarga de enviarlo.
+ */
 export async function crearEnlaceRecuperacion(usuarioId) {
   const token = crearToken();
 
@@ -38,7 +48,12 @@ export async function crearEnlaceRecuperacion(usuarioId) {
   return enlace.toString();
 }
 
-/** Cambia la contraseña si el token es válido y revoca todas las sesiones previas. */
+/** Cambia la contraseña si el token es válido y revoca todas las sesiones previas.
+ *
+ * Para seguir el recorrido: Comprueba que el token corresponda a una recuperación vigente
+ * y sin usar. Si lo acepta, consume el token, actualiza el hash de contraseña y revoca las
+ * sesiones anteriores. No devuelve la contraseña vieja.
+ */
 export async function restablecerPasswordConToken(token, nuevaPassword) {
   if (!/^[a-f0-9]{64}$/.test(token ?? '')) {
     return { success: false, message: 'El enlace no es válido o expiró' };

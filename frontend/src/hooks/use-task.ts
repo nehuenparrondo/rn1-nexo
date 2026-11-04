@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Estado reutilizable de una operación asíncrona: pendiente, éxito y
+ * error. Ayuda a deshabilitar acciones mientras trabajan y a no mostrar éxito antes de
+ * terminar la petición.
+ */
+
 import { useRef, useState } from 'react';
 
 export function useTask() {

@@ -1,3 +1,10 @@
+/**
+ * Guía de lectura. Componente reutilizable delete-confirmation. Sus props conectan
+ * contenido y acciones con el componente que lo usa; para seguir el dato, buscar sus
+ * importaciones y los callbacks recibidos en lugar de suponer que guarda directamente en
+ * una base.
+ */
+
 import { Modal, ScrollView, View, useWindowDimensions } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useTheme } from '@/providers/theme-provider';

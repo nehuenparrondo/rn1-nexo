@@ -1,3 +1,8 @@
+/**
+ * Guía de lectura. Selector de foto para móvil/web. Convierte el resultado permitido al
+ * formato que entiende la API y distingue cancelar la selección de guardar una foto nueva.
+ */
+
 import * as ImagePicker from 'expo-image-picker';
 import { ImageManipulator, SaveFormat } from 'expo-image-manipulator';
 

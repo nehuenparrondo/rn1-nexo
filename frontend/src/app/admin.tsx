@@ -1,3 +1,9 @@
+/**
+ * Guía de lectura. Pantalla/entrada de Expo Router. Administración: lista y modifica otras
+ * cuentas mediante endpoints protegidos. Las operaciones persistentes se delegan a
+ * servicios y no se ejecutan como SQL desde el teléfono.
+ */
+
 import { useEffect, useRef, useState } from 'react';
 import { router } from 'expo-router';
 import { FlatList, View, useWindowDimensions } from 'react-native';
