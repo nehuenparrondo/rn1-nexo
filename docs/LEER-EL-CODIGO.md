@@ -12,6 +12,12 @@ frontend contiene React Native/Expo/TypeScript y las pantallas de Expo Router. b
 
 ## 1. Desde el formulario al usuario registrado
 
+El ingreso verificado ahora llega a /bienvenida. La ruta app/bienvenida.tsx
+recibe el perfil del contexto y lo entrega por user={session.user} a
+pages/WelcomePage.tsx. Ese componente muestra la bienvenida mediante props.
+La configuración local persistente y los tres puntos de la consigna se explican
+en [Ingreso, bienvenida y MySQL](CONSIGNA-LOGIN-MYSQL.md).
+
 src/app/registro.tsx mantiene borradores y revisa los campos → apiAccess.register → POST /api/personas → createApp valida en servidor → consultas.crearPersona comprueba duplicados y guarda bcrypt en usuarios. La ruta abre una sesión inicial y solicita un código. Una cuenta no verificada todavía tiene restricciones aunque exista una sesión.
 
 src/app/index.tsx usa el mismo cliente para login. consultas.login compara bcrypt; la ruta crea la sesión y devuelve el perfil público. SessionProvider.accept actualiza el usuario del contexto y el vencimiento del código. No guarda una contraseña en el contexto.

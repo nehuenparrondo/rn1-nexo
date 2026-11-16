@@ -68,6 +68,7 @@ function Navigation() {
           />
         </Stack.Protected>
         <Stack.Protected guard={!!session.user?.email_verified_at}>
+          <Stack.Screen name="bienvenida" options={{ title: 'Bienvenida' }} />
           <Stack.Screen name="cuenta" options={{ title: 'Mi cuenta' }} />
           <Stack.Protected guard={session.user?.role === 'admin'}>
             <Stack.Screen

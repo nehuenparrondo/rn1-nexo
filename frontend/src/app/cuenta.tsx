@@ -108,6 +108,12 @@ export default function AccountScreen() {
           </Copy>
           <Copy heading>Mi cuenta</Copy>
           <Copy>Tu perfil, tus preferencias y el control de tu acceso.</Copy>
+          <Action
+            label="Volver a bienvenida"
+            link
+            onPress={() => router.replace('/bienvenida')}
+            disabled={busy}
+          />
         </View>
         <Card style={{ gap: 20 }}>
           <View style={{ flexDirection: 'row', alignItems: 'center', gap: 16 }}>

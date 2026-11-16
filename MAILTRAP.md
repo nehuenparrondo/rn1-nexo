@@ -1,5 +1,10 @@
 # RN1 con Mailtrap Sandbox
 
+La entrega con base persistente se inicia con npm start en backend y
+npm run local -- --web en frontend. Utiliza rn1_nexo de XAMPP y conserva los
+correos en Mailtrap. El modo demo descrito más abajo es una alternativa temporal.
+Consultar docs/CONSIGNA-LOGIN-MYSQL.md para mostrar el ingreso y la bienvenida.
+
 ## Dónde llega el código
 
 Los mensajes de RN1 llegan a **Mailtrap → Email Sandbox → My Sandbox**. No llegan a Gmail ni al correo real que se escribió al registrarse. En este equipo se usa el mismo buzón autorizado para R5, con ID 4924041:

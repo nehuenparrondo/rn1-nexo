@@ -23,7 +23,7 @@ export default function LoginScreen() {
   if (session.user)
     return (
       <Redirect
-        href={session.user.email_verified_at ? '/cuenta' : '/verificar-email'}
+        href={session.user.email_verified_at ? '/bienvenida' : '/verificar-email'}
       />
     );
   if (social.user) return <Redirect href="/cuenta-auth0" />;

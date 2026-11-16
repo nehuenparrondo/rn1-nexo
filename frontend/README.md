@@ -1,5 +1,14 @@
 # RN1 — aplicación de cuentas en React Native
 
+## Entrega local con base y bienvenida
+
+La configuración local de esta computadora usa la API en http://127.0.0.1:5091/api
+y MySQL/MariaDB de XAMPP con la base rn1_nexo. Encender MySQL, ejecutar npm start
+en backend y npm run local -- --web aquí. El ingreso verificado abre /bienvenida,
+cuya página visual recibe el usuario por props.
+
+Consultar [la consigna y la configuración local](../docs/CONSIGNA-LOGIN-MYSQL.md).
+
 ## Correo y presentación al profesor
 
 RN1 ahora envía verificación y recuperación a Mailtrap Sandbox. Los pasos para abrir el buzón, usar Expo Go y ejecutar el nuevo modo de demostración están en [MAILTRAP.md](../MAILTRAP.md).
