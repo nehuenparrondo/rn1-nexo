@@ -32,6 +32,7 @@ type Session = {
 };
 const SessionContext = createContext<Session | null>(null);
 export function SessionProvider({ children }: PropsWithChildren) {
+  // Este perfil es estado de presentación. La autoridad de sesión sigue estando en la API.
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
   const [startupError, setStartupError] = useState('');

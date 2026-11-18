@@ -1,10 +1,13 @@
 /**
- * Guía de lectura. Pantalla/entrada de Expo Router. Documento HTML de la exportación web;
- * no es una pantalla del teléfono. Las operaciones persistentes se delegan a servicios y
- * no se ejecutan como SQL desde el teléfono.
+ * Documento raíz de la web de RN1. Define idioma, metadatos y estilos base y coloca
+ * los recursos y scripts generados por Expo Router 58 para hidratar las pantallas.
+ * Este archivo interviene en la versión web; las pantallas nativas usan _layout.tsx.
  */
 
-import { ScrollViewStyleReset } from 'expo-router/html';
+import {
+  ScrollViewStyleReset,
+  useServerDocumentContext,
+} from 'expo-router/html';
 import type { PropsWithChildren } from 'react';
 import { palettes } from '@/theme';
 
@@ -18,16 +21,27 @@ const webBase = `
 `;
 
 export default function Root({ children }: PropsWithChildren) {
+  // SDK 58 entrega aquí los recursos y scripts necesarios para activar la web.
+  const { htmlAttributes, headNodes, bodyAttributes, bodyNodes } =
+    useServerDocumentContext();
   return (
-    <html lang="es">
+    <html {...htmlAttributes} lang="es">
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>Nexo · Tu espacio de cuentas</title>
+        <meta
+          name="description"
+          content="Tu perfil, tus preferencias y el control de tu acceso en un mismo lugar."
+        />
         <ScrollViewStyleReset />
         <style>{webBase}</style>
+        {headNodes}
       </head>
-      <body>{children}</body>
+      <body {...bodyAttributes}>
+        {children}
+        {bodyNodes}
+      </body>
     </html>
   );
 }

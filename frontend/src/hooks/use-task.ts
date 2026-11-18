@@ -1,7 +1,5 @@
 /**
- * Guía de lectura. Estado reutilizable de una operación asíncrona: pendiente, éxito y
- * error. Ayuda a deshabilitar acciones mientras trabajan y a no mostrar éxito antes de
- * terminar la petición.
+ * Estado de una operación de Nexo. run controla espera, errores y confirmación alrededor de una promesa y comunica el resultado a la pantalla.
  */
 
 import { useRef, useState } from 'react';

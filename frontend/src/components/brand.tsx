@@ -1,7 +1,5 @@
 /**
- * Guía de lectura. Componente reutilizable brand. Sus props conectan contenido y acciones
- * con el componente que lo usa; para seguir el dato, buscar sus importaciones y los
- * callbacks recibidos en lugar de suponer que guarda directamente en una base.
+ * Marca visual de Nexo reutilizada por las pantallas. Presenta identidad y textos sin administrar datos de cuenta.
  */
 
 import { StyleSheet, Text, View } from 'react-native';

@@ -21,7 +21,22 @@ function apiUrl() {
       ? process.env.EXPO_PUBLIC_NATIVE_API_URL?.trim()
       : undefined;
   const configured = nativeUrl || process.env.EXPO_PUBLIC_API_URL?.trim();
-  if (configured) return configured.replace(/\/$/, '');
+  if (configured) {
+    const url = configured.replace(/\/$/, '');
+    // localhost y 127.0.0.1 son sitios distintos para las cookies del navegador.
+    // Mantener el mismo host evita perder la sesión al volver desde Mailtrap.
+    if (
+      Platform.OS === 'web' &&
+      typeof window !== 'undefined' &&
+      ['localhost', '127.0.0.1', '[::1]'].includes(window.location.hostname) &&
+      /^https?:\/\/(localhost|127\.0\.0\.1|\[::1\])(?=[:/]|$)/i.test(url)
+    ) {
+      const endpoint = new URL(url);
+      endpoint.hostname = window.location.hostname;
+      return endpoint.toString().replace(/\/$/, '');
+    }
+    return url;
+  }
   if (!__DEV__)
     throw new ApiError('Falta configurar la dirección del servidor.', 0);
   if (Platform.OS === 'web') return 'http://localhost:3005/api';
@@ -212,6 +227,7 @@ export const resetPassword = (token: string, password: string) =>
     false,
     204,
   );
+/** Guarda el nombre por la sesión actual y devuelve el perfil confirmado por el servidor. */
 export const updateUsername = (username: string) =>
   request<User>('/cuenta/username', {
     method: 'PUT',
@@ -243,6 +259,7 @@ export const changePassword = (currentPassword: string, password: string) =>
  */
 export const deleteOwnAccount = () =>
   request<void>('/cuenta', { method: 'DELETE' });
+/** La búsqueda viaja en la URL codificada; el permiso admin se exige nuevamente en Node. */
 export const getAdminUsers = (query = '') =>
   request<AdminUser[]>(`/admin/usuarios?q=${encodeURIComponent(query.trim())}`);
 export const updateAdminUser = (

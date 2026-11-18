@@ -1,5 +1,10 @@
 # R5 → RN1
 
+Este archivo conserva el registro histórico de la migración inicial. El estado
+actual se explica en [la guía del código](../docs/LEER-EL-CODIGO.md) y en
+[la actualización a SDK 58](../docs/EXPO-SDK-58.md). El enlace de recuperación
+y la eliminación propia fueron retirados de las pantallas el 17 de noviembre.
+
 Source: R5/backend and R5/frontendReactRouter/src. Backup folders were not used as implementation sources.
 All product screens are implemented with native React Native / Expo UI controls.
 

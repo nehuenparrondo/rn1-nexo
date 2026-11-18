@@ -1,7 +1,5 @@
 /**
- * Guía de lectura. Ayudas compartidas para transformar o validar datos. Usarlas desde
- * varios puntos mantiene las mismas reglas; comprobar sus retornos antes de informar éxito
- * en la interfaz.
+ * Validaciones del cliente Nexo. Comprueba política y longitud UTF-8 de contraseñas, formato de usuario y email antes de enviar una petición.
  */
 
 /** La contraseña requiere ocho caracteres como mínimo, una letra y un número. */

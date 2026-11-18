@@ -1,7 +1,5 @@
 /**
- * Guía de lectura. Parte del sistema visual: comparte colores, tamaños o preferencia de
- * tema según su implementación. La preferencia de apariencia es independiente de la
- * autenticación y de los datos de las tareas.
+ * Botón que consume el proveedor visual de Nexo y solicita alternar su modo claro u oscuro.
  */
 
 import { Platform, Pressable } from 'react-native';

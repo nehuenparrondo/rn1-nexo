@@ -96,12 +96,6 @@ export default function LoginScreen() {
           disabled={task.busy}
         />
       </View>
-      <Action
-        label="Olvidé mi contraseña"
-        link
-        onPress={() => router.push('/recuperar-contrasena')}
-        disabled={task.busy}
-      />
     </AuthLayout>
   );
 }

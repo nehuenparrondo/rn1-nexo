@@ -13,6 +13,7 @@ export default function WelcomeScreen() {
   const task = useTask();
   if (!session.user) return null;
 
+  // WelcomePage recibe datos y acciones explícitos. No consulta SQL ni administra credenciales.
   return (
     <WelcomePage
       user={session.user}

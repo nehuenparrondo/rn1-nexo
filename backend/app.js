@@ -273,6 +273,7 @@ export function createApp(services) {
     next();
   });
 
+  // Restaurar sesión vuelve a consultar SQL y entrega únicamente el perfil público.
   app.get('/api/sesion', requerirSesion, (req, res) => {
     res.json(usuarioPublico(req.usuario));
   });
@@ -359,6 +360,7 @@ export function createApp(services) {
     },
   );
 
+  // Flujo de ingreso: buscar credenciales, crear sesión y verificar correo si está pendiente.
   app.post(
     '/api/login',
     validarCampos('identifier', 'password'),
@@ -385,6 +387,7 @@ export function createApp(services) {
     },
   );
 
+  // El registro guarda la cuenta antes de enviar el correo. El código confirma su email.
   app.post(
     '/api/personas',
     validarCampos('username', 'email', 'password'),

@@ -38,7 +38,7 @@ function loadSource(file, dependencies = {}, globals = {}) {
   return exports;
 }
 
-function apiClient(fetch, platform = 'ios') {
+function apiClient(fetch, platform = 'ios', settings = {}) {
   const calls = [];
   let token = 'a'.repeat(64);
   const api = loadSource(
@@ -59,6 +59,10 @@ function apiClient(fetch, platform = 'ios') {
       },
     },
     {
+      process: { env: settings.env || {} },
+      window: settings.hostname
+        ? { location: { hostname: settings.hostname } }
+        : undefined,
       fetch: async (...args) => {
         calls.push(args);
         return fetch(...args);
@@ -67,6 +71,34 @@ function apiClient(fetch, platform = 'ios') {
   );
   return { api, calls, token: () => token };
 }
+
+for (const [hostname, configured, expected] of [
+  ['localhost', 'http://127.0.0.1:5091/api', 'http://localhost:5091/api/sesion'],
+  ['127.0.0.1', 'http://localhost:5091/api/', 'http://127.0.0.1:5091/api/sesion'],
+  ['localhost', 'https://api.example.test/api', 'https://api.example.test/api/sesion'],
+]) {
+  test(`web: conserva el sitio de la cookie con ${hostname} y ${configured}`, async () => {
+    const client = apiClient(async () => Response.json({ username: 'ensayo' }), 'web', {
+      hostname, env: { EXPO_PUBLIC_API_URL: configured },
+    });
+    await client.api.getCurrentUser();
+    assert.equal(client.calls[0][0], expected);
+    assert.equal(client.calls[0][1].credentials, 'include');
+  });
+}
+
+test('iPhone: conserva la dirección de red propia del cliente nativo', async () => {
+  const client = apiClient(async () => Response.json({ username: 'ensayo' }), 'ios', {
+    hostname: 'localhost',
+    env: {
+      EXPO_PUBLIC_API_URL: 'http://127.0.0.1:5091/api',
+      EXPO_PUBLIC_NATIVE_API_URL: 'http://192.0.2.1:5091/api',
+    },
+  });
+  await client.api.getCurrentUser();
+  assert.equal(client.calls[0][0], 'http://192.0.2.1:5091/api/sesion');
+  assert.equal(client.calls[0][1].credentials, 'omit');
+});
 
 for (const platform of ['ios', 'android', 'web']) {
   test(`${platform}: password change sends the exact passwords and waits for server confirmation`, async () => {

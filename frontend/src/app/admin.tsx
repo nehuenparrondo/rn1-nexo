@@ -208,7 +208,7 @@ export default function AdminScreen() {
           ListEmptyComponent={
             loading ? (
               <Loading label="Cargando usuarios…" />
-            ) : error ? null : (
+            ) : error ? undefined : (
               <View style={{ gap: 16 }}>
                 <Copy>No hay usuarios que coincidan.</Copy>
                 <Action

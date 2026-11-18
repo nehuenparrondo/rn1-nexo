@@ -29,7 +29,11 @@ npm run build:web
 npm run build:all
 ```
 
-Implementa los flujos de R5 con Expo SDK 57 y Expo Router: inicio de sesión, registro, verificación por código, recuperación/restablecimiento de contraseña, cuenta, fotos y administración. Conserva los textos en español y los temas claro/oscuro. El backend de Node/Express sigue en `../backend`.
+Implementa los flujos de cuentas con Expo SDK 58 y Expo Router: inicio de sesión,
+registro, verificación por código, cuenta, fotos y administración. La API conserva
+recuperación/restablecimiento; el enlace de recuperación y la eliminación propia
+fueron retirados de las pantallas a pedido. Conserva los textos en español y los
+temas claro/oscuro. El backend de Node/Express sigue en `../backend`.
 
 ## Iniciar el backend
 

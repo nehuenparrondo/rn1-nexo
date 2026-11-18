@@ -1,7 +1,5 @@
 /**
- * Guía de lectura. Componente reutilizable field. Sus props conectan contenido y acciones
- * con el componente que lo usa; para seguir el dato, buscar sus importaciones y los
- * callbacks recibidos en lugar de suponer que guarda directamente en una base.
+ * Campo controlado de Nexo. Enlaza value y onChange, etiqueta, teclado y opciones de contraseña sin ejecutar el guardado.
  */
 
 import { useRef, useState } from 'react';
@@ -11,6 +9,7 @@ import {
   Text,
   TextInput,
   View,
+  type TextInputInstance,
   type TextInputProps,
 } from 'react-native';
 import { useTheme } from '@/providers/theme-provider';
@@ -41,7 +40,7 @@ export function Field({
   const { colors } = useTheme();
   const [visible, setVisible] = useState(false);
   const [focused, setFocused] = useState(false);
-  const input = useRef<TextInput>(null);
+  const input = useRef<TextInputInstance>(null);
   return (
     <View style={{ gap: 8, minWidth: 0, width: '100%' }}>
       <Text

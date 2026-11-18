@@ -1,7 +1,5 @@
 /**
- * Guía de lectura. Parte del sistema visual: comparte colores, tamaños o preferencia de
- * tema según su implementación. La preferencia de apariencia es independiente de la
- * autenticación y de los datos de las tareas.
+ * Sistema visual de Nexo. Reúne paletas, métricas y cálculos de espaciado y tamaño para adaptar los componentes al ancho y la plataforma.
  */
 
 import { Platform } from 'react-native';

@@ -1,7 +1,5 @@
 /**
- * Guía de lectura. Componente reutilizable avatar. Sus props conectan contenido y acciones
- * con el componente que lo usa; para seguir el dato, buscar sus importaciones y los
- * callbacks recibidos en lugar de suponer que guarda directamente en una base.
+ * Avatar de Nexo. Recibe nombre y foto por props y presenta la imagen o su representación de respaldo.
  */
 
 import { useState } from 'react';
